@@ -1,6 +1,19 @@
-import { IsString, IsNumber, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsMongoId } from 'class-validator';
 
 export class UpdateDto {
   @IsString()
-  name: string;
+  @IsOptional()
+  name?: string;
+
+  @IsString()
+  @IsOptional()
+  nisn?: string;
+
+  @IsMongoId()
+  @IsOptional()
+  school_id?: string;
+
+  @IsMongoId()
+  @IsOptional()
+  user_id?: string;
 }
