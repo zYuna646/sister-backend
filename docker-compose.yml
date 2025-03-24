@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    container_name: sister
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.production
+    depends_on: []
+    restart: always
+    networks:
+      - sister_network
+
+networks:
+  sister_network:
+    driver: bridge
