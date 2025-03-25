@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
 import { UserSchema } from './common/schemas/user.schema';
 import { RoleSchema } from './common/schemas/role.schema';
@@ -9,6 +8,8 @@ const Role = mongoose.model('Role', RoleSchema);
 
 async function bootstrap() {
   try {
+    console.log(process.env.MONGODB_URI);
+
     await mongoose.connect(process.env.MONGODB_URI as string);
     console.log('Berhasil terkoneksi ke MongoDB');
 
