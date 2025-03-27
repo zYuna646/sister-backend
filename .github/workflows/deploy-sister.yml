@@ -23,7 +23,7 @@ jobs:
         run: |
           ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
             cd /root/sister-backend  # Sesuaikan path project di VPS
-            git pull origin main  # Tarik perubahan terbaru dari GitHub
+            git pull --rebase origin main  # Tarik perubahan terbaru dari GitHub
             docker-compose down  # Matikan container lama
-            docker-compose up --build --no-cache -d  # Bangun ulang tanpa cache dan jalankan container baru
+            docker-compose up --build -d  # Bangun ulang dan jalankan container baru
           EOF
