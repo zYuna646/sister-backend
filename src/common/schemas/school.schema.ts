@@ -2,20 +2,23 @@ import { BaseSchema } from 'src/common/base/base.schema';
 import { Document } from 'mongoose';
 import slugify from 'slugify';
 
-const RoleSchemaDefinition = {
+const SchoolSchemaDefinition = {
   name: { type: String, required: true },
   slug: { type: String, default: '' },
-  permissions: { type: [String], default: [] },
+  address: { type: String, default: '' },
+  phone: { type: String, default: '' },
+  email: { type: String, default: '' },
+  isActive: { type: Boolean, default: true },
 };
 
-const PopulateDefinition = {};
+const PopulateDefinition = [];
 
-export const RoleSchema = new BaseSchema(
-  RoleSchemaDefinition,
+export const SchoolSchema = new BaseSchema(
+  SchoolSchemaDefinition,
   PopulateDefinition,
 );
 
-RoleSchema.pre('save', function (next) {
+SchoolSchema.pre('save', function (next) {
   if (this.isModified('name')) {
     this.slug = slugify(this.name as string, { lower: true, strict: true });
   }
@@ -23,10 +26,13 @@ RoleSchema.pre('save', function (next) {
   next();
 });
 
-export interface Role extends Document {
+export interface School extends Document {
   name: string;
   slug: string;
-  permissions: [string];
+  address: string;
+  phone: string;
+  email: string;
+  isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

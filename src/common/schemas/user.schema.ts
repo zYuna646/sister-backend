@@ -9,11 +9,14 @@ const UserSchemaDefinition = {
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Role' },
+  school_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'School',
+    default: null,
+  },
 };
 
-const PopulateDefinition = {
-  path: 'role',
-};
+const PopulateDefinition = ['role', 'school_id'];
 
 export const UserSchema = new BaseSchema(
   UserSchemaDefinition,
@@ -42,6 +45,7 @@ export interface User extends Document {
   email: string;
   password: string;
   role: mongoose.Schema.Types.ObjectId;
+  school_id?: mongoose.Schema.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
