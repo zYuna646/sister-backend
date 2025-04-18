@@ -22,7 +22,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('SISTER BACKEND API')
-    .setDescription('Sister Backend API Desc ')
+    .setDescription('Sister Backend API ')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
