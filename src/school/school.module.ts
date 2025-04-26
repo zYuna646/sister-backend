@@ -10,5 +10,8 @@ import { SchoolSchema } from 'src/common/schemas/school.schema';
   ],
   controllers: [SchoolController],
   providers: [SchoolService],
+  exports: [
+    MongooseModule.forFeature([{ name: 'School', schema: SchoolSchema }]),
+  ],
 })
 export class SchoolModule {}

@@ -1,4 +1,10 @@
-import { IsString, IsEmail, IsOptional, IsBoolean } from 'class-validator';
+import {
+  IsString,
+  IsEmail,
+  IsOptional,
+  IsBoolean,
+  IsArray,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateDtoSchool {
@@ -10,6 +16,15 @@ export class UpdateDtoSchool {
     required: false,
   })
   name?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({
+    description: 'School NPSN (Nomor Pokok Sekolah Nasional)',
+    example: '12345678',
+    required: false,
+  })
+  npsn?: string;
 
   @IsString()
   @IsOptional()
@@ -37,6 +52,38 @@ export class UpdateDtoSchool {
     required: false,
   })
   email?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({
+    description: 'API Key for school',
+    example: 'sk_school_12345abcde',
+    required: false,
+  })
+  api_key?: string;
+
+  @IsArray()
+  @IsOptional()
+  @ApiProperty({
+    description: 'School vision statements',
+    example: ['Provide quality education', 'Create innovative learners'],
+    required: false,
+    type: [String],
+  })
+  visi?: string[];
+
+  @IsArray()
+  @IsOptional()
+  @ApiProperty({
+    description: 'School mission statements',
+    example: [
+      'Implement modern teaching methods',
+      'Develop character building',
+    ],
+    required: false,
+    type: [String],
+  })
+  misi?: string[];
 
   @IsBoolean()
   @IsOptional()

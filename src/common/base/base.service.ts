@@ -7,8 +7,13 @@ import { BaseResponse } from './base.response';
 export abstract class BaseService<T extends Document> {
   constructor(protected readonly model: Model<T>) {}
 
-  async create(createDto: any): Promise<BaseResponse<T>> {
+  async create(createDto: any, query?: any): Promise<BaseResponse<T>> {
     try {
+      // If school_id is in the query, add it to the DTO
+      if (query?.school_id) {
+        createDto.school_id = query.school_id;
+      }
+
       const createdEntity = new this.model(createDto);
       const savedEntity = await createdEntity.save();
       return new BaseResponse<T>(
@@ -26,9 +31,17 @@ export abstract class BaseService<T extends Document> {
     }
   }
 
-  async findAll(): Promise<BaseResponse<T[]>> {
+  async findAll(query?: any): Promise<BaseResponse<T[]>> {
     try {
-      const entities = await this.model.find().exec();
+      // Build filter based on query params
+      const filter: any = {};
+
+      // If school_id is provided in query, filter by it
+      if (query?.school_id) {
+        filter.school_id = query.school_id;
+      }
+
+      const entities = await this.model.find(filter).exec();
       return new BaseResponse<T[]>(
         HttpStatus.OK,
         'Entities fetched successfully',
@@ -44,9 +57,16 @@ export abstract class BaseService<T extends Document> {
     }
   }
 
-  async findById(id: string): Promise<BaseResponse<T>> {
+  async findById(id: string, query?: any): Promise<BaseResponse<T>> {
     try {
-      const entity = await this.model.findOne({ _id: id }).exec();
+      const filter: any = { _id: id };
+
+      // If school_id is provided in query, also filter by it
+      if (query?.school_id) {
+        filter.school_id = query.school_id;
+      }
+
+      const entity = await this.model.findOne(filter).exec();
       if (!entity) {
         return new BaseResponse<T>(
           HttpStatus.NOT_FOUND,
@@ -69,10 +89,21 @@ export abstract class BaseService<T extends Document> {
     }
   }
 
-  async update(id: string, updateDto: any): Promise<BaseResponse<T>> {
+  async update(
+    id: string,
+    updateDto: any,
+    query?: any,
+  ): Promise<BaseResponse<T>> {
     try {
+      const filter: any = { _id: id };
+
+      // If school_id is provided in query, also filter by it
+      if (query?.school_id) {
+        filter.school_id = query.school_id;
+      }
+
       const updatedEntity = await this.model
-        .findByIdAndUpdate(id, updateDto, { new: true })
+        .findOneAndUpdate(filter, updateDto, { new: true })
         .exec();
       if (!updatedEntity) {
         return new BaseResponse<T>(
@@ -96,9 +127,16 @@ export abstract class BaseService<T extends Document> {
     }
   }
 
-  async delete(id: string): Promise<BaseResponse<T>> {
+  async delete(id: string, query?: any): Promise<BaseResponse<T>> {
     try {
-      const deletedEntity = await this.model.findByIdAndDelete(id).exec();
+      const filter: any = { _id: id };
+
+      // If school_id is provided in query, also filter by it
+      if (query?.school_id) {
+        filter.school_id = query.school_id;
+      }
+
+      const deletedEntity = await this.model.findOneAndDelete(filter).exec();
       if (!deletedEntity) {
         return new BaseResponse<T>(
           HttpStatus.NOT_FOUND,

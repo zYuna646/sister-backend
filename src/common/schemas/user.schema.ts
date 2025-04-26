@@ -1,6 +1,7 @@
 import { BaseSchema } from 'src/common/base/base.schema';
 import mongoose, { Document } from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import { Role } from './role.schema';
 
 const SALT_ROUNDS = 10;
 
@@ -44,7 +45,7 @@ export interface User extends Document {
   name: string;
   email: string;
   password: string;
-  role: mongoose.Schema.Types.ObjectId;
+  role: Role | mongoose.Schema.Types.ObjectId;
   school_id?: mongoose.Schema.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
