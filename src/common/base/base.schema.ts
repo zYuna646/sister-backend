@@ -41,6 +41,28 @@ export class BaseSchema extends Schema {
       next();
     });
 
+    this.pre('find', function (next) {
+      // Handle both array and object formats for populate
+      if (Array.isArray(populateDefinition) && populateDefinition.length > 0) {
+        // Handle array of path strings: ['path1', 'path2']
+        populateDefinition.forEach((path: string) => {
+          this.populate(path);
+        });
+      } else if (
+        typeof populateDefinition === 'object' &&
+        Object.keys(populateDefinition).length > 0
+      ) {
+        // Handle object format with paths
+        for (const key in populateDefinition) {
+          if (Object.prototype.hasOwnProperty.call(populateDefinition, key)) {
+            const option = populateDefinition[key] as PopulateOptions;
+            this.populate(option);
+          }
+        }
+      }
+      next();
+    });
+
     this.pre('save', function (next) {
       this.updatedAt = new Date();
       next();

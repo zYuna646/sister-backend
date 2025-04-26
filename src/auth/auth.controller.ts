@@ -8,9 +8,15 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { LoginBody, LoginResponseDto } from './dto/auth-dto';
 
+@ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -33,13 +39,33 @@ export class AuthController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('validate')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Validate JWT token and get user data' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns user data for the authenticated user',
+  })
   @ApiResponse({
     status: 401,
     description: 'Unauthorized. Invalid or expired JWT token.',
   })
   async validate(@Request() req) {
-    console.log(req.user);
+    return this.authService.getUserById(req.user.userId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('profile')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get authenticated user profile' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the authenticated user profile',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized. Invalid or expired JWT token.',
+  })
+  async getProfile(@Request() req) {
     return this.authService.getUserById(req.user.userId);
   }
 }

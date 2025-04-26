@@ -7,6 +7,7 @@ import {
   Put,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { BaseController } from 'src/common/base/base.controller'; // Assuming BaseController provides basic CRUD functionality
 import { School } from 'src/common/schemas/school.schema';
@@ -21,12 +22,15 @@ import {
   ApiOperation,
   ApiParam,
   ApiResponse,
+  ApiSecurity,
 } from '@nestjs/swagger';
 import { Permission } from 'src/common/decorators/permissions.decorator';
 import { BaseResponse } from 'src/common/base/base.response';
+import { Request } from 'express';
 
 @Controller('school')
 @ApiBearerAuth()
+@ApiSecurity('x-api-key')
 export class SchoolController extends BaseController<School> {
   constructor(protected readonly schoolService: SchoolService) {
     super(schoolService);
@@ -54,8 +58,9 @@ export class SchoolController extends BaseController<School> {
   @Permission('POST')
   async create(
     @Body() createDto: CreateDtoSchool,
+    @Req() req: Request,
   ): Promise<BaseResponse<School>> {
-    return this.schoolService.create(createDto);
+    return this.schoolService.create(createDto, req.query);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
@@ -77,8 +82,8 @@ export class SchoolController extends BaseController<School> {
     type: BaseResponse,
   })
   @Permission('GET')
-  async findAll(): Promise<BaseResponse<School[]>> {
-    return this.schoolService.findAll();
+  async findAll(@Req() req: Request): Promise<BaseResponse<School[]>> {
+    return this.schoolService.findAll(req.query);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
@@ -101,8 +106,11 @@ export class SchoolController extends BaseController<School> {
     type: BaseResponse,
   })
   @Permission('GET')
-  async findById(@Param('id') id: string): Promise<BaseResponse<School>> {
-    return this.schoolService.findById(id);
+  async findById(
+    @Param('id') id: string,
+    @Req() req: Request,
+  ): Promise<BaseResponse<School>> {
+    return this.schoolService.findById(id, req.query);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
@@ -134,8 +142,9 @@ export class SchoolController extends BaseController<School> {
   async update(
     @Param('id') id: string,
     @Body() updateDto: UpdateDtoSchool,
+    @Req() req: Request,
   ): Promise<BaseResponse<School>> {
-    return this.schoolService.update(id, updateDto);
+    return this.schoolService.update(id, updateDto, req.query);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
@@ -158,7 +167,10 @@ export class SchoolController extends BaseController<School> {
     type: BaseResponse,
   })
   @Permission('DELETE')
-  async softDelete(@Param('id') id: string): Promise<BaseResponse<School>> {
-    return this.schoolService.delete(id);
+  async softDelete(
+    @Param('id') id: string,
+    @Req() req: Request,
+  ): Promise<BaseResponse<School>> {
+    return this.schoolService.delete(id, req.query);
   }
 }

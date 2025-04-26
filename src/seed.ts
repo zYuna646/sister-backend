@@ -82,17 +82,37 @@ async function bootstrap() {
     // Create schools
     const mainSchool = await School.create({
       name: 'Main High School',
+      npsn: '12345678', // Added required NPSN field
       address: 'Jl. Pendidikan No. 1',
       phone: '021-1234567',
       email: 'info@mainhighschool.com',
+      visi: [
+        'Menjadi sekolah unggul dalam pendidikan karakter',
+        'Menghasilkan lulusan berkualitas dan berdaya saing global',
+      ],
+      misi: [
+        'Menyelenggarakan pendidikan berkualitas tinggi',
+        'Membentuk siswa dengan karakter yang kuat',
+        'Mengembangkan potensi siswa dalam bidang akademik dan non-akademik',
+      ],
       isActive: true,
     });
 
     const secondarySchool = await School.create({
       name: 'Secondary High School',
+      npsn: '87654321', // Added required NPSN field
       address: 'Jl. Pendidikan No. 2',
       phone: '021-7654321',
       email: 'info@secondaryhighschool.com',
+      visi: [
+        'Menjadi pusat pengembangan pendidikan berbasis teknologi',
+        'Menghasilkan lulusan yang inovatif dan adaptif',
+      ],
+      misi: [
+        'Mengintegrasikan teknologi dalam pembelajaran',
+        'Membangun lingkungan belajar yang kolaboratif',
+        'Menerapkan metode pembelajaran berbasis proyek',
+      ],
       isActive: true,
     });
 
