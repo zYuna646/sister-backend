@@ -1,0 +1,554 @@
+{
+    "info": {
+      "name": "Sister Backend API",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Authentication",
+        "item": [
+          {
+            "name": "Login",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/auth/login",
+                "host": ["{{base_url}}"],
+                "path": ["auth", "login"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\"\n}"
+              },
+              "description": "Login and get JWT token"
+            }
+          },
+          {
+            "name": "Validate Token",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/auth/validate",
+                "host": ["{{base_url}}"],
+                "path": ["auth", "validate"]
+              },
+              "description": "Validate JWT token and get user data"
+            }
+          },
+          {
+            "name": "Get Profile",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/auth/profile",
+                "host": ["{{base_url}}"],
+                "path": ["auth", "profile"]
+              },
+              "description": "Get authenticated user profile"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Schools",
+        "item": [
+          {
+            "name": "Get All Schools",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/school",
+                "host": ["{{base_url}}"],
+                "path": ["school"]
+              },
+              "description": "Get all schools (requires authentication)"
+            }
+          },
+          {
+            "name": "Get School by ID",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/school/{{school_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["school", "{{school_id}}"]
+              },
+              "description": "Get a school by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Get School by API Key (Authenticated)",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/school/api-key?key={{api_key}}",
+                "host": ["{{base_url}}"],
+                "path": ["school", "api-key"],
+                "query": [
+                  {
+                    "key": "key",
+                    "value": "{{api_key}}"
+                  }
+                ]
+              },
+              "description": "Get a school by API key (requires authentication)"
+            }
+          },
+          {
+            "name": "Get School by API Key (Public)",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/school/public/api-key?key={{api_key}}",
+                "host": ["{{base_url}}"],
+                "path": ["school", "public", "api-key"],
+                "query": [
+                  {
+                    "key": "key",
+                    "value": "{{api_key}}"
+                  }
+                ]
+              },
+              "description": "Get a school by API key (public endpoint, no authentication required)"
+            }
+          },
+          {
+            "name": "Create School",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/school",
+                "host": ["{{base_url}}"],
+                "path": ["school"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"New School Name\",\n  \"npsn\": \"12345789\",\n  \"address\": \"School Address\",\n  \"phone\": \"123-456-7890\",\n  \"email\": \"school@example.com\",\n  \"visi\": [\"Vision statement 1\", \"Vision statement 2\"],\n  \"misi\": [\"Mission statement 1\", \"Mission statement 2\", \"Mission statement 3\"],\n  \"isActive\": true\n}"
+              },
+              "description": "Create a new school (requires authentication)"
+            }
+          },
+          {
+            "name": "Update School",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/school/{{school_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["school", "{{school_id}}"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Updated School Name\",\n  \"address\": \"Updated School Address\",\n  \"phone\": \"987-654-3210\",\n  \"email\": \"updated@example.com\",\n  \"visi\": [\"Updated vision statement 1\", \"Updated vision statement 2\"],\n  \"misi\": [\"Updated mission statement 1\", \"Updated mission statement 2\"],\n  \"isActive\": true\n}"
+              },
+              "description": "Update a school by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Delete School",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/school/{{school_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["school", "{{school_id}}"]
+              },
+              "description": "Delete a school by ID (requires authentication)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Users",
+        "item": [
+          {
+            "name": "Get All Users",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/user",
+                "host": ["{{base_url}}"],
+                "path": ["user"]
+              },
+              "description": "Get all users (requires authentication)"
+            }
+          },
+          {
+            "name": "Get User by ID",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/user/{{user_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["user", "{{user_id}}"]
+              },
+              "description": "Get a user by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Create User",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/user",
+                "host": ["{{base_url}}"],
+                "path": ["user"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"New User\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"{{role_id}}\",\n  \"school_id\": \"{{school_id}}\"\n}"
+              },
+              "description": "Create a new user (requires authentication)"
+            }
+          },
+          {
+            "name": "Update User",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/user/{{user_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["user", "{{user_id}}"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Updated User Name\",\n  \"email\": \"updated@example.com\",\n  \"role\": \"{{role_id}}\",\n  \"school_id\": \"{{school_id}}\"\n}"
+              },
+              "description": "Update a user by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Delete User",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/user/{{user_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["user", "{{user_id}}"]
+              },
+              "description": "Delete a user by ID (requires authentication)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Roles",
+        "item": [
+          {
+            "name": "Get All Roles",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/role",
+                "host": ["{{base_url}}"],
+                "path": ["role"]
+              },
+              "description": "Get all roles (requires authentication)"
+            }
+          },
+          {
+            "name": "Get Role by ID",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/role/{{role_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["role", "{{role_id}}"]
+              },
+              "description": "Get a role by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Create Role",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/role",
+                "host": ["{{base_url}}"],
+                "path": ["role"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"New Role\",\n  \"permissions\": [\"GET USER\", \"PUT USER\", \"GET SCHOOL\"]\n}"
+              },
+              "description": "Create a new role (requires authentication)"
+            }
+          },
+          {
+            "name": "Update Role",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/role/{{role_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["role", "{{role_id}}"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Updated Role Name\",\n  \"permissions\": [\"GET USER\", \"PUT USER\", \"GET SCHOOL\", \"POST SCHOOL\"]\n}"
+              },
+              "description": "Update a role by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Delete Role",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/role/{{role_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["role", "{{role_id}}"]
+              },
+              "description": "Delete a role by ID (requires authentication)"
+            }
+          }
+        ]
+      }
+    ],
+    "variable": [
+      {
+        "key": "base_url",
+        "value": "http://localhost:3000",
+        "type": "string"
+      },
+      {
+        "key": "jwt_token",
+        "value": "your_jwt_token_here",
+        "type": "string"
+      },
+      {
+        "key": "api_key",
+        "value": "your_api_key_here",
+        "type": "string"
+      },
+      {
+        "key": "school_id",
+        "value": "your_school_id_here",
+        "type": "string"
+      },
+      {
+        "key": "user_id",
+        "value": "your_user_id_here",
+        "type": "string"
+      },
+      {
+        "key": "role_id",
+        "value": "your_role_id_here",
+        "type": "string"
+      }
+    ]
+  }

@@ -7,6 +7,7 @@ import {
   Put,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateDtoUser } from './dto/create.dto';
@@ -19,13 +20,16 @@ import {
   ApiParam,
   ApiResponse,
   ApiBearerAuth,
+  ApiSecurity,
 } from '@nestjs/swagger';
 import { Permission } from 'src/common/decorators/permissions.decorator';
 import { BaseResponse } from 'src/common/base/base.response';
 import { User } from 'src/common/schemas/user.schema';
+import { Request } from 'express';
 
 @Controller('user')
 @ApiBearerAuth()
+@ApiSecurity('x-api-key')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -49,8 +53,11 @@ export class UserController {
     type: BaseResponse,
   })
   @Permission('POST')
-  async create(@Body() createDto: CreateDtoUser): Promise<BaseResponse<User>> {
-    return this.userService.create(createDto);
+  async create(
+    @Body() createDto: CreateDtoUser,
+    @Req() req: Request,
+  ): Promise<BaseResponse<User>> {
+    return this.userService.create(createDto, req.query);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
@@ -72,8 +79,8 @@ export class UserController {
     type: BaseResponse,
   })
   @Permission('GET')
-  async findAll(): Promise<BaseResponse<User[]>> {
-    return this.userService.findAll();
+  async findAll(@Req() req: Request): Promise<BaseResponse<User[]>> {
+    return this.userService.findAll(req.query);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
@@ -96,8 +103,11 @@ export class UserController {
     type: BaseResponse,
   })
   @Permission('GET')
-  async findById(@Param('id') id: string): Promise<BaseResponse<User>> {
-    return this.userService.findById(id);
+  async findById(
+    @Param('id') id: string,
+    @Req() req: Request,
+  ): Promise<BaseResponse<User>> {
+    return this.userService.findById(id, req.query);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
@@ -129,8 +139,9 @@ export class UserController {
   async update(
     @Param('id') id: string,
     @Body() updateDto: UpdateDtoUser,
+    @Req() req: Request,
   ): Promise<BaseResponse<User>> {
-    return this.userService.update(id, updateDto);
+    return this.userService.update(id, updateDto, req.query);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
@@ -153,7 +164,10 @@ export class UserController {
     type: BaseResponse,
   })
   @Permission('DELETE')
-  async softDelete(@Param('id') id: string): Promise<BaseResponse<User>> {
-    return this.userService.delete(id);
+  async softDelete(
+    @Param('id') id: string,
+    @Req() req: Request,
+  ): Promise<BaseResponse<User>> {
+    return this.userService.delete(id, req.query);
   }
 }
