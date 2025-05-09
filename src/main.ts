@@ -3,8 +3,14 @@ import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import 'reflect-metadata';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
+
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    cors: true,
+  });
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -13,11 +19,8 @@ async function bootstrap() {
     }),
   );
 
-  app.enableCors({
-    origin: '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type, Authorization',
-    credentials: true,
+  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+    prefix: '/uploads/',
   });
 
   const config = new DocumentBuilder()
@@ -29,6 +32,8 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+
   await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
+  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
