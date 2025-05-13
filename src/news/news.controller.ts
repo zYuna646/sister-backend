@@ -9,6 +9,7 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
+  Request,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BaseController } from 'src/common/base/base.controller';
@@ -99,8 +100,11 @@ export class NewsController extends BaseController<News> {
     type: BaseResponse,
   })
   @Permission('POST')
-  async create(@Body() createDto: CreateDtoNews): Promise<BaseResponse<News>> {
-    return this.newsService.create(createDto);
+  async create(
+    @Body() createDto: CreateDtoNews,
+    @Request() req,
+  ): Promise<BaseResponse<News>> {
+    return this.newsService.create(createDto, req.user.id);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
@@ -153,13 +157,14 @@ export class NewsController extends BaseController<News> {
   async uploadAndCreate(
     @Body() createDto: CreateDtoNews,
     @UploadedFile() file: Express.Multer.File,
+    @Request() req,
   ): Promise<BaseResponse<News>> {
     // If file is uploaded, add the file path to DTO
     if (file) {
       createDto.thumbnail = `uploads/news/${file.filename}`;
     }
 
-    return this.newsService.create(createDto);
+    return this.newsService.create(createDto, req.user.id);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
@@ -226,8 +231,9 @@ export class NewsController extends BaseController<News> {
   async update(
     @Param('id') id: string,
     @Body() updateDto: UpdateDtoNews,
+    @Request() req,
   ): Promise<BaseResponse<News>> {
-    return this.newsService.update(id, updateDto);
+    return this.newsService.update(id, updateDto, req.user.id);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
