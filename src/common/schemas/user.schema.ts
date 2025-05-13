@@ -17,7 +17,7 @@ const UserSchemaDefinition = {
   },
 };
 
-const PopulateDefinition = ['role', 'school_id'];
+const PopulateDefinition = ['role'];
 
 export const UserSchema = new BaseSchema(
   UserSchemaDefinition,

@@ -9,6 +9,13 @@ import { AuthModule } from './auth/auth.module';
 import { SchoolModule } from './school/school.module';
 import { ApiKeyMiddleware } from './common/middleware';
 import { JwtModule } from '@nestjs/jwt';
+import { GalleryCategoryModule } from './gallery-category/gallery-category.module';
+import { GalleryModule } from './gallery/gallery.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { NewsCategoryModule } from './news-category/news-category.module';
+import { NewsModule } from './news/news.module';
 
 @Module({
   imports: [
@@ -22,10 +29,26 @@ import { JwtModule } from '@nestjs/jwt';
       secret: process.env.JWT_KEY,
       signOptions: { expiresIn: '1d' },
     }),
+    MulterModule.register({
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, callback) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const ext = extname(file.originalname);
+          const filename = `${uniqueSuffix}${ext}`;
+          callback(null, filename);
+        },
+      }),
+    }),
     RoleModule,
     UserModule,
     AuthModule,
     SchoolModule,
+    GalleryCategoryModule,
+    GalleryModule,
+    NewsCategoryModule,
+    NewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

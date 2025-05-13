@@ -1,0 +1,1469 @@
+{
+    "info": {
+      "name": "Sister Backend API",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Authentication",
+        "item": [
+          {
+            "name": "Login",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/auth/login",
+                "host": ["{{base_url}}"],
+                "path": ["auth", "login"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\"\n}"
+              },
+              "description": "Login and get JWT token"
+            }
+          },
+          {
+            "name": "Validate Token",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/auth/validate",
+                "host": ["{{base_url}}"],
+                "path": ["auth", "validate"]
+              },
+              "description": "Validate JWT token and get user data"
+            }
+          },
+          {
+            "name": "Get Profile",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/auth/profile",
+                "host": ["{{base_url}}"],
+                "path": ["auth", "profile"]
+              },
+              "description": "Get authenticated user profile"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Schools",
+        "item": [
+          {
+            "name": "Get All Schools",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/school",
+                "host": ["{{base_url}}"],
+                "path": ["school"]
+              },
+              "description": "Get all schools (requires authentication)"
+            }
+          },
+          {
+            "name": "Get School by ID",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/school/{{school_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["school", "{{school_id}}"]
+              },
+              "description": "Get a school by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Get School by API Key (Authenticated)",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/school/api-key?key={{api_key}}",
+                "host": ["{{base_url}}"],
+                "path": ["school", "api-key"],
+                "query": [
+                  {
+                    "key": "key",
+                    "value": "{{api_key}}"
+                  }
+                ]
+              },
+              "description": "Get a school by API key (requires authentication)"
+            }
+          },
+          {
+            "name": "Get School by API Key (Public)",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/school/public/api-key?key={{api_key}}",
+                "host": ["{{base_url}}"],
+                "path": ["school", "public", "api-key"],
+                "query": [
+                  {
+                    "key": "key",
+                    "value": "{{api_key}}"
+                  }
+                ]
+              },
+              "description": "Get a school by API key (public endpoint, no authentication required)"
+            }
+          },
+          {
+            "name": "Create School",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/school",
+                "host": ["{{base_url}}"],
+                "path": ["school"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"New School Name\",\n  \"npsn\": \"12345789\",\n  \"address\": \"School Address\",\n  \"phone\": \"123-456-7890\",\n  \"email\": \"school@example.com\",\n  \"visi\": [\"Vision statement 1\", \"Vision statement 2\"],\n  \"misi\": [\"Mission statement 1\", \"Mission statement 2\", \"Mission statement 3\"],\n  \"isActive\": true\n}"
+              },
+              "description": "Create a new school (requires authentication)"
+            }
+          },
+          {
+            "name": "Update School",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/school/{{school_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["school", "{{school_id}}"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Updated School Name\",\n  \"address\": \"Updated School Address\",\n  \"phone\": \"987-654-3210\",\n  \"email\": \"updated@example.com\",\n  \"visi\": [\"Updated vision statement 1\", \"Updated vision statement 2\"],\n  \"misi\": [\"Updated mission statement 1\", \"Updated mission statement 2\"],\n  \"isActive\": true\n}"
+              },
+              "description": "Update a school by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Delete School",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/school/{{school_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["school", "{{school_id}}"]
+              },
+              "description": "Delete a school by ID (requires authentication)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Users",
+        "item": [
+          {
+            "name": "Get All Users",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/user",
+                "host": ["{{base_url}}"],
+                "path": ["user"]
+              },
+              "description": "Get all users (requires authentication)"
+            }
+          },
+          {
+            "name": "Get User by ID",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/user/{{user_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["user", "{{user_id}}"]
+              },
+              "description": "Get a user by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Create User",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/user",
+                "host": ["{{base_url}}"],
+                "path": ["user"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"New User\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"{{role_id}}\",\n  \"school_id\": \"{{school_id}}\"\n}"
+              },
+              "description": "Create a new user (requires authentication)"
+            }
+          },
+          {
+            "name": "Update User",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/user/{{user_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["user", "{{user_id}}"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Updated User Name\",\n  \"email\": \"updated@example.com\",\n  \"role\": \"{{role_id}}\",\n  \"school_id\": \"{{school_id}}\"\n}"
+              },
+              "description": "Update a user by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Delete User",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/user/{{user_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["user", "{{user_id}}"]
+              },
+              "description": "Delete a user by ID (requires authentication)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Roles",
+        "item": [
+          {
+            "name": "Get All Roles",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/role",
+                "host": ["{{base_url}}"],
+                "path": ["role"]
+              },
+              "description": "Get all roles (requires authentication)"
+            }
+          },
+          {
+            "name": "Get Role by ID",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/role/{{role_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["role", "{{role_id}}"]
+              },
+              "description": "Get a role by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Create Role",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/role",
+                "host": ["{{base_url}}"],
+                "path": ["role"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"New Role\",\n  \"permissions\": [\"GET USER\", \"PUT USER\", \"GET SCHOOL\"]\n}"
+              },
+              "description": "Create a new role (requires authentication)"
+            }
+          },
+          {
+            "name": "Update Role",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/role/{{role_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["role", "{{role_id}}"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Updated Role Name\",\n  \"permissions\": [\"GET USER\", \"PUT USER\", \"GET SCHOOL\", \"POST SCHOOL\"]\n}"
+              },
+              "description": "Update a role by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Delete Role",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/role/{{role_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["role", "{{role_id}}"]
+              },
+              "description": "Delete a role by ID (requires authentication)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "News Categories",
+        "item": [
+          {
+            "name": "Get All News Categories",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/news-category",
+                "host": ["{{base_url}}"],
+                "path": ["news-category"]
+              },
+              "description": "Get all news categories (requires authentication)"
+            }
+          },
+          {
+            "name": "Get News Category by ID",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/news-category/{{news_category_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["news-category", "{{news_category_id}}"]
+              },
+              "description": "Get a news category by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Create News Category",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/news-category",
+                "host": ["{{base_url}}"],
+                "path": ["news-category"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"News Category Name\",\n  \"description\": \"News Category Description\",\n  \"school_id\": \"{{school_id}}\"\n}"
+              },
+              "description": "Create a new news category (requires authentication)"
+            }
+          },
+          {
+            "name": "Update News Category",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/news-category/{{news_category_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["news-category", "{{news_category_id}}"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Updated News Category Name\",\n  \"description\": \"Updated News Category Description\"\n}"
+              },
+              "description": "Update a news category by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Delete News Category",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/news-category/{{news_category_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["news-category", "{{news_category_id}}"]
+              },
+              "description": "Delete a news category by ID (requires authentication)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "News",
+        "item": [
+          {
+            "name": "Get All News",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/news",
+                "host": ["{{base_url}}"],
+                "path": ["news"]
+              },
+              "description": "Get all news articles (requires authentication)"
+            }
+          },
+          {
+            "name": "Get News by ID (Authenticated)",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/news/{{news_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["news", "{{news_id}}"]
+              },
+              "description": "Get a news article by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Get News by ID (Public)",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/news/public/{{news_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["news", "public", "{{news_id}}"]
+              },
+              "description": "Get a news article by ID (public endpoint, no authentication required, increments view count)"
+            }
+          },
+          {
+            "name": "Create News (No Thumbnail)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/news/create",
+                "host": ["{{base_url}}"],
+                "path": ["news", "create"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"title\": \"News Title\",\n  \"summary\": \"News Summary\",\n  \"content\": \"News Content\",\n  \"is_featured\": false,\n  \"publish_date\": \"2023-08-01T00:00:00.000Z\",\n  \"is_published\": true,\n  \"category_id\": \"{{news_category_id}}\",\n  \"school_id\": \"{{school_id}}\",\n  \"author_id\": \"{{user_id}}\"\n}"
+              },
+              "description": "Create a new news article without thumbnail (requires authentication)"
+            }
+          },
+          {
+            "name": "Create News with Thumbnail",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/news",
+                "host": ["{{base_url}}"],
+                "path": ["news"]
+              },
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "file",
+                    "type": "file",
+                    "src": "/path/to/image.jpg"
+                  },
+                  {
+                    "key": "title",
+                    "value": "News Title"
+                  },
+                  {
+                    "key": "summary",
+                    "value": "News Summary"
+                  },
+                  {
+                    "key": "content",
+                    "value": "News Content"
+                  },
+                  {
+                    "key": "is_featured",
+                    "value": "false"
+                  },
+                  {
+                    "key": "publish_date",
+                    "value": "2023-08-01T00:00:00.000Z"
+                  },
+                  {
+                    "key": "is_published",
+                    "value": "true"
+                  },
+                  {
+                    "key": "category_id",
+                    "value": "{{news_category_id}}"
+                  },
+                  {
+                    "key": "school_id",
+                    "value": "{{school_id}}"
+                  },
+                  {
+                    "key": "author_id",
+                    "value": "{{user_id}}"
+                  }
+                ]
+              },
+              "description": "Create a new news article with thumbnail upload (requires authentication)"
+            }
+          },
+          {
+            "name": "Upload Thumbnail for News",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/news/upload-thumbnail/{{news_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["news", "upload-thumbnail", "{{news_id}}"]
+              },
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "file",
+                    "type": "file",
+                    "src": "/path/to/image.jpg"
+                  }
+                ]
+              },
+              "description": "Upload a thumbnail for an existing news article (requires authentication)"
+            }
+          },
+          {
+            "name": "Update News",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/news/{{news_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["news", "{{news_id}}"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"title\": \"Updated News Title\",\n  \"summary\": \"Updated News Summary\",\n  \"content\": \"Updated News Content\",\n  \"is_featured\": true,\n  \"is_published\": true,\n  \"category_id\": \"{{news_category_id}}\"\n}"
+              },
+              "description": "Update a news article by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Delete News",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/news/{{news_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["news", "{{news_id}}"]
+              },
+              "description": "Delete a news article by ID (requires authentication)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Gallery Categories",
+        "item": [
+          {
+            "name": "Get All Gallery Categories",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/gallery-category",
+                "host": ["{{base_url}}"],
+                "path": ["gallery-category"]
+              },
+              "description": "Get all gallery categories (requires authentication)"
+            }
+          },
+          {
+            "name": "Get Gallery Category by ID",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/gallery-category/{{gallery_category_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["gallery-category", "{{gallery_category_id}}"]
+              },
+              "description": "Get a gallery category by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Create Gallery Category",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/gallery-category",
+                "host": ["{{base_url}}"],
+                "path": ["gallery-category"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Gallery Category Name\",\n  \"description\": \"Gallery Category Description\",\n  \"school_id\": \"{{school_id}}\"\n}"
+              },
+              "description": "Create a new gallery category (requires authentication)"
+            }
+          },
+          {
+            "name": "Update Gallery Category",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/gallery-category/{{gallery_category_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["gallery-category", "{{gallery_category_id}}"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Updated Gallery Category Name\",\n  \"description\": \"Updated Gallery Category Description\"\n}"
+              },
+              "description": "Update a gallery category by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Delete Gallery Category",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/gallery-category/{{gallery_category_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["gallery-category", "{{gallery_category_id}}"]
+              },
+              "description": "Delete a gallery category by ID (requires authentication)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Gallery",
+        "item": [
+          {
+            "name": "Get All Gallery Items",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/gallery",
+                "host": ["{{base_url}}"],
+                "path": ["gallery"]
+              },
+              "description": "Get all gallery items (requires authentication)"
+            }
+          },
+          {
+            "name": "Get Gallery Item by ID",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/gallery/{{gallery_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["gallery", "{{gallery_id}}"]
+              },
+              "description": "Get a gallery item by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Create Gallery Item (No Image)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/gallery/create",
+                "host": ["{{base_url}}"],
+                "path": ["gallery", "create"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"title\": \"Gallery Item Title\",\n  \"description\": \"Gallery Item Description\",\n  \"category_id\": \"{{gallery_category_id}}\",\n  \"school_id\": \"{{school_id}}\"\n}"
+              },
+              "description": "Create a new gallery item without image upload (requires authentication)"
+            }
+          },
+          {
+            "name": "Create Gallery Item with Image",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/gallery",
+                "host": ["{{base_url}}"],
+                "path": ["gallery"]
+              },
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "file",
+                    "type": "file",
+                    "src": "/path/to/image.jpg"
+                  },
+                  {
+                    "key": "title",
+                    "value": "Gallery Item Title"
+                  },
+                  {
+                    "key": "description",
+                    "value": "Gallery Item Description"
+                  },
+                  {
+                    "key": "category_id",
+                    "value": "{{gallery_category_id}}"
+                  },
+                  {
+                    "key": "school_id",
+                    "value": "{{school_id}}"
+                  }
+                ]
+              },
+              "description": "Create a new gallery item with image upload (requires authentication)"
+            }
+          },
+          {
+            "name": "Update Gallery Item",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/gallery/{{gallery_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["gallery", "{{gallery_id}}"]
+              },
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "file",
+                    "type": "file",
+                    "src": "/path/to/image.jpg",
+                    "description": "Optional: Upload a new image"
+                  },
+                  {
+                    "key": "title",
+                    "value": "Updated Gallery Item Title"
+                  },
+                  {
+                    "key": "description",
+                    "value": "Updated Gallery Item Description"
+                  },
+                  {
+                    "key": "category_id",
+                    "value": "{{gallery_category_id}}"
+                  }
+                ]
+              },
+              "description": "Update a gallery item by ID with optional image upload (requires authentication)"
+            }
+          },
+          {
+            "name": "Update Gallery Item (No Image)",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/gallery/update/{{gallery_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["gallery", "update", "{{gallery_id}}"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"title\": \"Updated Gallery Item Title\",\n  \"description\": \"Updated Gallery Item Description\",\n  \"category_id\": \"{{gallery_category_id}}\"\n}"
+              },
+              "description": "Update a gallery item by ID without image upload (requires authentication)"
+            }
+          },
+          {
+            "name": "Delete Gallery Item",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/gallery/{{gallery_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["gallery", "{{gallery_id}}"]
+              },
+              "description": "Delete a gallery item by ID (requires authentication)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Landing Schools",
+        "item": [
+          {
+            "name": "Get All Landing Schools",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/landing-schools",
+                "host": ["{{base_url}}"],
+                "path": ["landing-schools"]
+              },
+              "description": "Get all landing schools data (requires authentication)"
+            }
+          },
+          {
+            "name": "Get Landing School by ID",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/landing-schools/{{landing_school_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["landing-schools", "{{landing_school_id}}"]
+              },
+              "description": "Get a landing school by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Create Landing School",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/landing-schools",
+                "host": ["{{base_url}}"],
+                "path": ["landing-schools"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"school_id\": \"{{school_id}}\",\n  \"principal_message\": \"Welcome to our school. We are committed to providing quality education...\",\n  \"principal_photo\": \"uploads/landing-schools/principal-photo.jpg\",\n  \"hero_image\": \"uploads/landing-schools/hero-image.jpg\"\n}"
+              },
+              "description": "Create a new landing school (requires authentication)"
+            }
+          },
+          {
+            "name": "Update Landing School",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/landing-schools/{{landing_school_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["landing-schools", "{{landing_school_id}}"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"principal_message\": \"Updated welcome message for our school...\",\n  \"principal_photo\": \"uploads/landing-schools/updated-principal-photo.jpg\",\n  \"hero_image\": \"uploads/landing-schools/updated-hero-image.jpg\"\n}"
+              },
+              "description": "Update a landing school by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Delete Landing School",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/landing-schools/{{landing_school_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["landing-schools", "{{landing_school_id}}"]
+              },
+              "description": "Delete a landing school by ID (requires authentication)"
+            }
+          }
+        ]
+      }
+    ],
+    "variable": [
+      {
+        "key": "base_url",
+        "value": "http://localhost:3000",
+        "type": "string"
+      },
+      {
+        "key": "jwt_token",
+        "value": "your_jwt_token_here",
+        "type": "string"
+      },
+      {
+        "key": "api_key",
+        "value": "your_api_key_here",
+        "type": "string"
+      },
+      {
+        "key": "school_id",
+        "value": "your_school_id_here",
+        "type": "string"
+      },
+      {
+        "key": "user_id",
+        "value": "your_user_id_here",
+        "type": "string"
+      },
+      {
+        "key": "role_id",
+        "value": "your_role_id_here",
+        "type": "string"
+      },
+      {
+        "key": "news_id",
+        "value": "your_news_id_here",
+        "type": "string"
+      },
+      {
+        "key": "news_category_id",
+        "value": "your_news_category_id_here",
+        "type": "string"
+      },
+      {
+        "key": "gallery_id",
+        "value": "your_gallery_id_here",
+        "type": "string"
+      },
+      {
+        "key": "gallery_category_id",
+        "value": "your_gallery_category_id_here",
+        "type": "string"
+      },
+      {
+        "key": "landing_school_id",
+        "value": "your_landing_school_id_here",
+        "type": "string"
+      }
+    ]
+  }

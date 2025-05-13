@@ -12,16 +12,16 @@ export class PermissionsGuard implements CanActivate {
       context.getHandler(),
     );
 
-    console.log(requiredPermission);
+    console.log('requiredPermission', requiredPermission);
 
-    if (!requiredPermission) {
-      return true;
-    }
+    // if (!requiredPermission) {
+    //   return true;
+    // }
 
     const request = context.switchToHttp().getRequest();
 
     const permissions = request.user.role.permissions;
-    console.log(permissions);
+    console.log('permissions', permissions);
     if (permissions.includes('*')) {
       return true;
     }
@@ -32,6 +32,7 @@ export class PermissionsGuard implements CanActivate {
       .toUpperCase();
     const permission = `${requiredPermission} ${resource}`;
 
+    console.log('permission', permission);
     return permissions.includes(permission);
   }
 }

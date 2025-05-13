@@ -7,39 +7,38 @@ import {
   Put,
   Delete,
   UseGuards,
-  Req,
 } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateDtoUser } from './dto/create.dto';
-import { UpdateDtoUser } from './dto/update.dto';
+import { BaseController } from 'src/common/base/base.controller'; // Assuming BaseController provides basic CRUD functionality
+import { NewsCategory } from 'src/common/schemas/news-category.schema';
+import { NewsCategoryService } from './news-category.service';
 import { AuthGuard } from '@nestjs/passport';
 import { PermissionsGuard } from 'src/common/guards/permissions/permissions.guard';
+import { CreateDtoNewsCategory } from './dto/create.dto';
+import { UpdateDtoNewsCategory } from './dto/update.dto';
 import {
-  ApiOperation,
+  ApiBearerAuth,
   ApiBody,
+  ApiOperation,
   ApiParam,
   ApiResponse,
-  ApiBearerAuth,
-  ApiSecurity,
 } from '@nestjs/swagger';
 import { Permission } from 'src/common/decorators/permissions.decorator';
 import { BaseResponse } from 'src/common/base/base.response';
-import { User } from 'src/common/schemas/user.schema';
-import { Request } from 'express';
 
-@Controller('user')
+@Controller('news-category')
 @ApiBearerAuth()
-@ApiSecurity('x-api-key')
-export class UserController {
-  constructor(private readonly userService: UserService) {}
+export class NewsCategoryController extends BaseController<NewsCategory> {
+  constructor(protected readonly newsCategoryService: NewsCategoryService) {
+    super(newsCategoryService);
+  }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Post()
-  @ApiOperation({ summary: 'Create a new user' })
-  @ApiBody({ type: CreateDtoUser })
+  @ApiOperation({ summary: 'Create a new news category' })
+  @ApiBody({ type: CreateDtoNewsCategory })
   @ApiResponse({
     status: 201,
-    description: 'The user has been successfully created.',
+    description: 'The news category has been successfully created.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -54,23 +53,22 @@ export class UserController {
   })
   @Permission('POST')
   async create(
-    @Body() createDto: CreateDtoUser,
-    @Req() req: Request,
-  ): Promise<BaseResponse<User>> {
-    return this.userService.create(createDto, req.query);
+    @Body() createDto: CreateDtoNewsCategory,
+  ): Promise<BaseResponse<NewsCategory>> {
+    return this.newsCategoryService.create(createDto);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Get()
-  @ApiOperation({ summary: 'Get all users' })
+  @ApiOperation({ summary: 'Get all news categories' })
   @ApiResponse({
     status: 200,
-    description: 'Successfully retrieved all users.',
+    description: 'Successfully retrieved all news categories.',
     type: BaseResponse,
   })
   @ApiResponse({
     status: 404,
-    description: 'Users not found.',
+    description: 'No news categories found.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -79,22 +77,22 @@ export class UserController {
     type: BaseResponse,
   })
   @Permission('GET')
-  async findAll(@Req() req: Request): Promise<BaseResponse<User[]>> {
-    return this.userService.findAll(req.query);
+  async findAll(): Promise<BaseResponse<NewsCategory[]>> {
+    return this.newsCategoryService.findAll();
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Get(':id')
-  @ApiOperation({ summary: 'Get a user by ID' })
+  @ApiOperation({ summary: 'Get a news category by ID' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({
     status: 200,
-    description: 'Successfully retrieved the user.',
+    description: 'Successfully retrieved the news category.',
     type: BaseResponse,
   })
   @ApiResponse({
     status: 404,
-    description: 'User not found.',
+    description: 'No news category found with the given ID.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -103,21 +101,18 @@ export class UserController {
     type: BaseResponse,
   })
   @Permission('GET')
-  async findById(
-    @Param('id') id: string,
-    @Req() req: Request,
-  ): Promise<BaseResponse<User>> {
-    return this.userService.findById(id, req.query);
+  async findById(@Param('id') id: string): Promise<BaseResponse<NewsCategory>> {
+    return this.newsCategoryService.findById(id);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Put(':id')
-  @ApiOperation({ summary: 'Update a user by ID' })
+  @ApiOperation({ summary: 'Update a news category by ID' })
   @ApiParam({ name: 'id', type: String })
-  @ApiBody({ type: UpdateDtoUser })
+  @ApiBody({ type: UpdateDtoNewsCategory })
   @ApiResponse({
     status: 200,
-    description: 'The user has been successfully updated.',
+    description: 'The news category has been successfully updated.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -127,7 +122,7 @@ export class UserController {
   })
   @ApiResponse({
     status: 404,
-    description: 'User not found.',
+    description: 'No news category found with the given ID.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -138,24 +133,23 @@ export class UserController {
   @Permission('PUT')
   async update(
     @Param('id') id: string,
-    @Body() updateDto: UpdateDtoUser,
-    @Req() req: Request,
-  ): Promise<BaseResponse<User>> {
-    return this.userService.update(id, updateDto, req.query);
+    @Body() updateDto: UpdateDtoNewsCategory,
+  ): Promise<BaseResponse<NewsCategory>> {
+    return this.newsCategoryService.update(id, updateDto);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete a user by ID' })
+  @ApiOperation({ summary: 'Delete a news category by ID' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({
     status: 200,
-    description: 'The user has been successfully deleted.',
+    description: 'The news category has been successfully deleted.',
     type: BaseResponse,
   })
   @ApiResponse({
     status: 404,
-    description: 'User not found.',
+    description: 'No news category found with the given ID.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -166,8 +160,7 @@ export class UserController {
   @Permission('DELETE')
   async softDelete(
     @Param('id') id: string,
-    @Req() req: Request,
-  ): Promise<BaseResponse<User>> {
-    return this.userService.delete(id, req.query);
+  ): Promise<BaseResponse<NewsCategory>> {
+    return this.newsCategoryService.delete(id);
   }
 }

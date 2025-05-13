@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  Query,
 } from '@nestjs/common';
 import { BaseController } from 'src/common/base/base.controller'; // Assuming BaseController provides basic CRUD functionality
 import { School } from 'src/common/schemas/school.schema';
@@ -23,6 +24,7 @@ import {
   ApiParam,
   ApiResponse,
   ApiSecurity,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { Permission } from 'src/common/decorators/permissions.decorator';
 import { BaseResponse } from 'src/common/base/base.response';
@@ -84,6 +86,65 @@ export class SchoolController extends BaseController<School> {
   @Permission('GET')
   async findAll(@Req() req: Request): Promise<BaseResponse<School[]>> {
     return this.schoolService.findAll(req.query);
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+  @Get('api-key')
+  @ApiOperation({ summary: 'Get a school by API key (authenticated)' })
+  @ApiQuery({
+    name: 'key',
+    description: 'The API key of the school',
+    type: String,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully retrieved the school.',
+    type: BaseResponse,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'No school found with the given API key.',
+    type: BaseResponse,
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error.',
+    type: BaseResponse,
+  })
+  @Permission('GET')
+  async findByApiKey(
+    @Query('key') apiKey: string,
+  ): Promise<BaseResponse<School>> {
+    return this.schoolService.findByApiKey(apiKey);
+  }
+
+  @Get('public/api-key')
+  @ApiOperation({ summary: 'Get a school by API key (public)' })
+  @ApiQuery({
+    name: 'key',
+    description: 'The API key of the school',
+    type: String,
+    required: true,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully retrieved the school.',
+    type: BaseResponse,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'No school found with the given API key.',
+    type: BaseResponse,
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error.',
+    type: BaseResponse,
+  })
+  async findByApiKeyPublic(
+    @Query('key') apiKey: string,
+  ): Promise<BaseResponse<School>> {
+    return this.schoolService.findByApiKey(apiKey);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)

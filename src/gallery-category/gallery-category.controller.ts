@@ -7,39 +7,40 @@ import {
   Put,
   Delete,
   UseGuards,
-  Req,
 } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateDtoUser } from './dto/create.dto';
-import { UpdateDtoUser } from './dto/update.dto';
+import { BaseController } from 'src/common/base/base.controller'; // Assuming BaseController provides basic CRUD functionality
+import { GalleryCategory } from 'src/common/schemas/gallery-category.schema';
+import { GalleryCategoryService } from './gallery-category.service';
 import { AuthGuard } from '@nestjs/passport';
 import { PermissionsGuard } from 'src/common/guards/permissions/permissions.guard';
+import { CreateDtoGalleryCategory } from './dto/create.dto';
+import { UpdateDtoGalleryCategory } from './dto/update.dto';
 import {
-  ApiOperation,
+  ApiBearerAuth,
   ApiBody,
+  ApiOperation,
   ApiParam,
   ApiResponse,
-  ApiBearerAuth,
-  ApiSecurity,
 } from '@nestjs/swagger';
 import { Permission } from 'src/common/decorators/permissions.decorator';
 import { BaseResponse } from 'src/common/base/base.response';
-import { User } from 'src/common/schemas/user.schema';
-import { Request } from 'express';
 
-@Controller('user')
+@Controller('gallery-category')
 @ApiBearerAuth()
-@ApiSecurity('x-api-key')
-export class UserController {
-  constructor(private readonly userService: UserService) {}
+export class GalleryCategoryController extends BaseController<GalleryCategory> {
+  constructor(
+    protected readonly galleryCategoryService: GalleryCategoryService,
+  ) {
+    super(galleryCategoryService);
+  }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Post()
-  @ApiOperation({ summary: 'Create a new user' })
-  @ApiBody({ type: CreateDtoUser })
+  @ApiOperation({ summary: 'Create a new gallery category' })
+  @ApiBody({ type: CreateDtoGalleryCategory })
   @ApiResponse({
     status: 201,
-    description: 'The user has been successfully created.',
+    description: 'The gallery category has been successfully created.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -54,23 +55,22 @@ export class UserController {
   })
   @Permission('POST')
   async create(
-    @Body() createDto: CreateDtoUser,
-    @Req() req: Request,
-  ): Promise<BaseResponse<User>> {
-    return this.userService.create(createDto, req.query);
+    @Body() createDto: CreateDtoGalleryCategory,
+  ): Promise<BaseResponse<GalleryCategory>> {
+    return this.galleryCategoryService.create(createDto);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Get()
-  @ApiOperation({ summary: 'Get all users' })
+  @ApiOperation({ summary: 'Get all gallery categories' })
   @ApiResponse({
     status: 200,
-    description: 'Successfully retrieved all users.',
+    description: 'Successfully retrieved all gallery categories.',
     type: BaseResponse,
   })
   @ApiResponse({
     status: 404,
-    description: 'Users not found.',
+    description: 'No gallery categories found.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -79,22 +79,22 @@ export class UserController {
     type: BaseResponse,
   })
   @Permission('GET')
-  async findAll(@Req() req: Request): Promise<BaseResponse<User[]>> {
-    return this.userService.findAll(req.query);
+  async findAll(): Promise<BaseResponse<GalleryCategory[]>> {
+    return this.galleryCategoryService.findAll();
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Get(':id')
-  @ApiOperation({ summary: 'Get a user by ID' })
+  @ApiOperation({ summary: 'Get a gallery category by ID' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({
     status: 200,
-    description: 'Successfully retrieved the user.',
+    description: 'Successfully retrieved the gallery category.',
     type: BaseResponse,
   })
   @ApiResponse({
     status: 404,
-    description: 'User not found.',
+    description: 'No gallery category found with the given ID.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -105,19 +105,18 @@ export class UserController {
   @Permission('GET')
   async findById(
     @Param('id') id: string,
-    @Req() req: Request,
-  ): Promise<BaseResponse<User>> {
-    return this.userService.findById(id, req.query);
+  ): Promise<BaseResponse<GalleryCategory>> {
+    return this.galleryCategoryService.findById(id);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Put(':id')
-  @ApiOperation({ summary: 'Update a user by ID' })
+  @ApiOperation({ summary: 'Update a gallery category by ID' })
   @ApiParam({ name: 'id', type: String })
-  @ApiBody({ type: UpdateDtoUser })
+  @ApiBody({ type: UpdateDtoGalleryCategory })
   @ApiResponse({
     status: 200,
-    description: 'The user has been successfully updated.',
+    description: 'The gallery category has been successfully updated.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -127,7 +126,7 @@ export class UserController {
   })
   @ApiResponse({
     status: 404,
-    description: 'User not found.',
+    description: 'No gallery category found with the given ID.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -138,24 +137,23 @@ export class UserController {
   @Permission('PUT')
   async update(
     @Param('id') id: string,
-    @Body() updateDto: UpdateDtoUser,
-    @Req() req: Request,
-  ): Promise<BaseResponse<User>> {
-    return this.userService.update(id, updateDto, req.query);
+    @Body() updateDto: UpdateDtoGalleryCategory,
+  ): Promise<BaseResponse<GalleryCategory>> {
+    return this.galleryCategoryService.update(id, updateDto);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete a user by ID' })
+  @ApiOperation({ summary: 'Delete a gallery category by ID' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({
     status: 200,
-    description: 'The user has been successfully deleted.',
+    description: 'The gallery category has been successfully deleted.',
     type: BaseResponse,
   })
   @ApiResponse({
     status: 404,
-    description: 'User not found.',
+    description: 'No gallery category found with the given ID.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -166,8 +164,7 @@ export class UserController {
   @Permission('DELETE')
   async softDelete(
     @Param('id') id: string,
-    @Req() req: Request,
-  ): Promise<BaseResponse<User>> {
-    return this.userService.delete(id, req.query);
+  ): Promise<BaseResponse<GalleryCategory>> {
+    return this.galleryCategoryService.delete(id);
   }
 }
