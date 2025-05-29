@@ -41,11 +41,41 @@ export abstract class BaseService<T extends Document> {
         filter.school_id = query.school_id;
       }
 
-      const entities = await this.model.find(filter).exec();
+      // Pagination parameters
+      const page = query?.page ? parseInt(query.page, 10) : 1;
+      const limit = query?.limit ? parseInt(query.limit, 10) : 10;
+      const skip = (page - 1) * limit;
+
+      // Get total count for pagination metadata
+      const total = await this.model.countDocuments(filter);
+
+      // Find entities with pagination
+      const entities = await this.model
+        .find(filter)
+        .skip(skip)
+        .limit(limit)
+        .exec();
+
+      // Calculate pagination metadata
+      const totalPages = Math.ceil(total / limit);
+      const hasNextPage = page < totalPages;
+      const hasPrevPage = page > 1;
+
       return new BaseResponse<T[]>(
         HttpStatus.OK,
         'Entities fetched successfully',
         entities,
+        null,
+        {
+          pagination: {
+            total,
+            page,
+            limit,
+            totalPages,
+            hasNextPage,
+            hasPrevPage,
+          },
+        },
       );
     } catch (error) {
       return new BaseResponse<T[]>(

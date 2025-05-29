@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsEmail, IsMongoId } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsEmail,
+  IsMongoId,
+  IsOptional,
+  IsObject,
+} from 'class-validator';
 
 export class CreateDtoUser {
   @IsString()
@@ -33,4 +40,30 @@ export class CreateDtoUser {
     example: '60d21b2f9e3fbd6d6c98e6b0',
   })
   role: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({
+    description: 'Path to user profile photo',
+    example: 'uploads/users/profile-photo-123456.jpg',
+    required: false,
+  })
+  foto?: string;
+
+  @IsObject()
+  @IsOptional()
+  @ApiProperty({
+    description:
+      'User details based on role (guru: {nip, is_active}, siswa: {nisn})',
+    example: { nip: '123456789', is_active: true },
+    required: false,
+  })
+  details?: {
+    // For guru
+    nip?: string;
+    is_active?: boolean;
+    jabatan_id?: string;
+    // For siswa
+    nisn?: string;
+  };
 }

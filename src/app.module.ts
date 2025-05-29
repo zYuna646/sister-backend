@@ -7,6 +7,8 @@ import { RoleModule } from './role/role.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { SchoolModule } from './school/school.module';
+import { JabatanModule } from './jabatan/jabatan.module';
+import { ClassroomModule } from './classroom/classroom.module';
 import { ApiKeyMiddleware } from './common/middleware';
 import { JwtModule } from '@nestjs/jwt';
 import { GalleryCategoryModule } from './gallery-category/gallery-category.module';
@@ -45,6 +47,8 @@ import { NewsModule } from './news/news.module';
     UserModule,
     AuthModule,
     SchoolModule,
+    JabatanModule,
+    ClassroomModule,
     GalleryCategoryModule,
     GalleryModule,
     NewsCategoryModule,

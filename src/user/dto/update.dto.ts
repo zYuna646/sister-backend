@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsOptional, IsEmail, IsMongoId } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsEmail,
+  IsMongoId,
+  IsObject,
+} from 'class-validator';
 
 export class UpdateDtoUser {
   @IsString()
@@ -37,4 +43,30 @@ export class UpdateDtoUser {
     required: false,
   })
   role?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({
+    description: 'Updated path to user profile photo',
+    example: 'uploads/users/updated-profile-photo-123456.jpg',
+    required: false,
+  })
+  foto?: string;
+
+  @IsObject()
+  @IsOptional()
+  @ApiProperty({
+    description:
+      'Updated user details based on role (guru: {nip, is_active}, siswa: {nisn})',
+    example: { nip: '123456789', is_active: true },
+    required: false,
+  })
+  details?: {
+    // For guru
+    nip?: string;
+    is_active?: boolean;
+    jabatan_id?: string;
+    // For siswa
+    nisn?: string;
+  };
 }

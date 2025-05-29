@@ -59,6 +59,7 @@ export class ApiKeyMiddleware implements NestMiddleware {
           }
         } catch (error) {
           // Invalid token, continue to API key check
+          console.log('error', error);
         }
       }
 

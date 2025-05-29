@@ -379,6 +379,827 @@
               },
               "description": "Delete a user by ID (requires authentication)"
             }
+          },
+          {
+            "name": "Upload User Profile Photo",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/user/upload-photo/{{user_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["user", "upload-photo", "{{user_id}}"]
+              },
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "file",
+                    "type": "file",
+                    "src": "/path/to/profile-photo.jpg",
+                    "description": "User profile photo (jpg, jpeg, png, gif - max 5MB)"
+                  }
+                ]
+              },
+              "description": "Upload user profile photo (requires authentication)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Guru Management",
+        "item": [
+          {
+            "name": "Get All Guru",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/guru",
+                "host": ["{{base_url}}"],
+                "path": ["guru"]
+              },
+              "description": "Get all guru users (requires authentication)"
+            }
+          },
+          {
+            "name": "Get Guru by ID",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/guru/{{guru_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["guru", "{{guru_id}}"]
+              },
+              "description": "Get a guru by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Create Guru",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/guru",
+                "host": ["{{base_url}}"],
+                "path": ["guru"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.guru@example.com\",\n  \"password\": \"password123\",\n  \"foto\": \"uploads/users/guru-photo-123456.jpg\",\n  \"nip\": \"196501011990031001\",\n  \"is_active\": true,\n  \"jabatan_id\": \"{{jabatan_id}}\"\n}"
+              },
+              "description": "Create a new guru (requires authentication)"
+            }
+          },
+          {
+            "name": "Update Guru",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/guru/{{guru_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["guru", "{{guru_id}}"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Updated Guru Name\",\n  \"email\": \"updated.guru@example.com\",\n  \"foto\": \"uploads/users/updated-guru-photo.jpg\",\n  \"details\": {\n    \"nip\": \"196501011990031002\",\n    \"is_active\": false,\n    \"jabatan_id\": \"{{jabatan_id}}\"\n  }\n}"
+              },
+              "description": "Update a guru by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Delete Guru",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/guru/{{guru_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["guru", "{{guru_id}}"]
+              },
+              "description": "Delete a guru by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Upload Guru Profile Photo",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/guru/upload-photo/{{guru_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["guru", "upload-photo", "{{guru_id}}"]
+              },
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "file",
+                    "type": "file",
+                    "src": "/path/to/guru-photo.jpg",
+                    "description": "Guru profile photo (jpg, jpeg, png, gif - max 5MB)"
+                  }
+                ]
+              },
+              "description": "Upload guru profile photo (requires authentication)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Siswa Management",
+        "item": [
+          {
+            "name": "Get All Siswa",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/siswa",
+                "host": ["{{base_url}}"],
+                "path": ["siswa"]
+              },
+              "description": "Get all siswa users (requires authentication)"
+            }
+          },
+          {
+            "name": "Get Siswa by ID",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/siswa/{{siswa_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["siswa", "{{siswa_id}}"]
+              },
+              "description": "Get a siswa by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Create Siswa",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/siswa",
+                "host": ["{{base_url}}"],
+                "path": ["siswa"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Jane Smith\",\n  \"email\": \"jane.siswa@example.com\",\n  \"password\": \"password123\",\n  \"foto\": \"uploads/users/siswa-photo-123456.jpg\",\n  \"nisn\": \"0123456789\"\n}"
+              },
+              "description": "Create a new siswa (requires authentication)"
+            }
+          },
+          {
+            "name": "Update Siswa",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/siswa/{{siswa_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["siswa", "{{siswa_id}}"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Updated Siswa Name\",\n  \"email\": \"updated.siswa@example.com\",\n  \"foto\": \"uploads/users/updated-siswa-photo.jpg\",\n  \"details\": {\n    \"nisn\": \"0123456790\"\n  }\n}"
+              },
+              "description": "Update a siswa by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Delete Siswa",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/siswa/{{siswa_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["siswa", "{{siswa_id}}"]
+              },
+              "description": "Delete a siswa by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Upload Siswa Profile Photo",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/siswa/upload-photo/{{siswa_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["siswa", "upload-photo", "{{siswa_id}}"]
+              },
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "file",
+                    "type": "file",
+                    "src": "/path/to/siswa-photo.jpg",
+                    "description": "Siswa profile photo (jpg, jpeg, png, gif - max 5MB)"
+                  }
+                ]
+              },
+              "description": "Upload siswa profile photo (requires authentication)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Jabatan Management",
+        "item": [
+          {
+            "name": "Get All Jabatan",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/jabatan?parent_only=false&is_active=true",
+                "host": ["{{base_url}}"],
+                "path": ["jabatan"],
+                "query": [
+                  {
+                    "key": "parent_only",
+                    "value": "false",
+                    "description": "Filter to get only parent jabatan"
+                  },
+                  {
+                    "key": "is_active",
+                    "value": "true",
+                    "description": "Filter by active status"
+                  }
+                ]
+              },
+              "description": "Get all jabatan (requires authentication)"
+            }
+          },
+          {
+            "name": "Get Jabatan Hierarchy",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/jabatan/hierarchy",
+                "host": ["{{base_url}}"],
+                "path": ["jabatan", "hierarchy"]
+              },
+              "description": "Get complete jabatan hierarchy tree (requires authentication)"
+            }
+          },
+          {
+            "name": "Get Jabatan Children",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/jabatan/{{jabatan_id}}/children",
+                "host": ["{{base_url}}"],
+                "path": ["jabatan", "{{jabatan_id}}", "children"]
+              },
+              "description": "Get children jabatan by parent ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Get Jabatan by ID",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/jabatan/{{jabatan_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["jabatan", "{{jabatan_id}}"]
+              },
+              "description": "Get a jabatan by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Create Jabatan",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/jabatan",
+                "host": ["{{base_url}}"],
+                "path": ["jabatan"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"nama\": \"Kepala Sekolah\",\n  \"slug\": \"kepala-sekolah\",\n  \"jabatan_id\": null,\n  \"is_active\": true\n}"
+              },
+              "description": "Create a new jabatan (requires authentication)"
+            }
+          },
+          {
+            "name": "Create Child Jabatan",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/jabatan",
+                "host": ["{{base_url}}"],
+                "path": ["jabatan"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"nama\": \"Wakil Kepala Sekolah\",\n  \"slug\": \"wakil-kepala-sekolah\",\n  \"jabatan_id\": \"{{parent_jabatan_id}}\",\n  \"is_active\": true\n}"
+              },
+              "description": "Create a child jabatan with parent reference (requires authentication)"
+            }
+          },
+          {
+            "name": "Update Jabatan",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/jabatan/{{jabatan_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["jabatan", "{{jabatan_id}}"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"nama\": \"Updated Jabatan Name\",\n  \"slug\": \"updated-jabatan-slug\",\n  \"is_active\": false\n}"
+              },
+              "description": "Update a jabatan by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Delete Jabatan",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/jabatan/{{jabatan_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["jabatan", "{{jabatan_id}}"]
+              },
+              "description": "Delete a jabatan by ID (requires authentication)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Classroom Management",
+        "item": [
+          {
+            "name": "Get All Classrooms",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/classroom?guru_id={{guru_id}}&grade=7&is_active=true",
+                "host": ["{{base_url}}"],
+                "path": ["classroom"],
+                "query": [
+                  {
+                    "key": "guru_id",
+                    "value": "{{guru_id}}",
+                    "description": "Filter by guru ID"
+                  },
+                  {
+                    "key": "grade",
+                    "value": "7",
+                    "description": "Filter by grade"
+                  },
+                  {
+                    "key": "is_active",
+                    "value": "true",
+                    "description": "Filter by active status"
+                  }
+                ]
+              },
+              "description": "Get all classrooms (requires authentication)"
+            }
+          },
+          {
+            "name": "Get Classroom by ID",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/classroom/{{classroom_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["classroom", "{{classroom_id}}"]
+              },
+              "description": "Get a classroom by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Get Students in Classroom",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/classroom/{{classroom_id}}/students",
+                "host": ["{{base_url}}"],
+                "path": ["classroom", "{{classroom_id}}", "students"]
+              },
+              "description": "Get all students currently assigned to a classroom (requires authentication)"
+            }
+          },
+          {
+            "name": "Create Classroom",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/classroom",
+                "host": ["{{base_url}}"],
+                "path": ["classroom"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Kelas 7A\",\n  \"grade\": \"7\",\n  \"guru_id\": \"{{guru_id}}\",\n  \"is_active\": true\n}"
+              },
+              "description": "Create a new classroom (requires authentication)"
+            }
+          },
+          {
+            "name": "Assign Student to Classroom",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/classroom/{{classroom_id}}/assign/{{siswa_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["classroom", "{{classroom_id}}", "assign", "{{siswa_id}}"]
+              },
+              "description": "Assign a student to a classroom with history tracking (requires authentication)"
+            }
+          },
+          {
+            "name": "Update Classroom",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/classroom/{{classroom_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["classroom", "{{classroom_id}}"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Kelas 7B Updated\",\n  \"grade\": \"8\",\n  \"guru_id\": \"{{guru_id}}\",\n  \"is_active\": false\n}"
+              },
+              "description": "Update a classroom by ID (requires authentication)"
+            }
+          },
+          {
+            "name": "Remove Student from Classroom",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/classroom/{{classroom_id}}/remove/{{siswa_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["classroom", "{{classroom_id}}", "remove", "{{siswa_id}}"]
+              },
+              "description": "Remove a student from classroom and update history (requires authentication)"
+            }
+          },
+          {
+            "name": "Delete Classroom",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{jwt_token}}"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{api_key}}",
+                  "description": "Required for non-superadmin users"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/classroom/{{classroom_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["classroom", "{{classroom_id}}"]
+              },
+              "description": "Delete a classroom by ID (requires authentication)"
+            }
           }
         ]
       },
@@ -1463,6 +2284,31 @@
       {
         "key": "landing_school_id",
         "value": "your_landing_school_id_here",
+        "type": "string"
+      },
+      {
+        "key": "guru_id",
+        "value": "your_guru_id_here",
+        "type": "string"
+      },
+      {
+        "key": "siswa_id",
+        "value": "your_siswa_id_here",
+        "type": "string"
+      },
+      {
+        "key": "jabatan_id",
+        "value": "your_jabatan_id_here",
+        "type": "string"
+      },
+      {
+        "key": "parent_jabatan_id",
+        "value": "your_parent_jabatan_id_here",
+        "type": "string"
+      },
+      {
+        "key": "classroom_id",
+        "value": "your_classroom_id_here",
         "type": "string"
       }
     ]

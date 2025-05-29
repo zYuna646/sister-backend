@@ -15,7 +15,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { UserService } from './user.service';
-import { CreateDtoUser } from './dto/create.dto';
+import { CreateGuruDto } from './dto/create-guru.dto';
 import { UpdateDtoUser } from './dto/update.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { PermissionsGuard } from 'src/common/guards/permissions/permissions.guard';
@@ -33,20 +33,20 @@ import { BaseResponse } from 'src/common/base/base.response';
 import { User } from 'src/common/schemas/user.schema';
 import { Request } from 'express';
 
-@Controller('user')
+@Controller('guru')
 @ApiBearerAuth()
 @ApiSecurity('x-api-key')
-@ApiTags('User Management')
-export class UserController {
+@ApiTags('Guru Management')
+export class GuruController {
   constructor(private readonly userService: UserService) {}
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Post()
-  @ApiOperation({ summary: 'Create a new user' })
-  @ApiBody({ type: CreateDtoUser })
+  @ApiOperation({ summary: 'Create a new guru' })
+  @ApiBody({ type: CreateGuruDto })
   @ApiResponse({
     status: 201,
-    description: 'The user has been successfully created.',
+    description: 'The guru has been successfully created.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -61,23 +61,23 @@ export class UserController {
   })
   @Permission('POST')
   async create(
-    @Body() createDto: CreateDtoUser,
+    @Body() createGuruDto: CreateGuruDto,
     @Req() req: Request,
   ): Promise<BaseResponse<User>> {
-    return this.userService.create(createDto, req.query);
+    return this.userService.createGuru(createGuruDto, req.query);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Get()
-  @ApiOperation({ summary: 'Get all users' })
+  @ApiOperation({ summary: 'Get all guru' })
   @ApiResponse({
     status: 200,
-    description: 'Successfully retrieved all users.',
+    description: 'Successfully retrieved all guru.',
     type: BaseResponse,
   })
   @ApiResponse({
     status: 404,
-    description: 'Users not found.',
+    description: 'Guru not found.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -87,21 +87,21 @@ export class UserController {
   })
   @Permission('GET')
   async findAll(@Req() req: Request): Promise<BaseResponse<User[]>> {
-    return this.userService.findAll(req.query);
+    return this.userService.findAllGuru(req.query);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Get(':id')
-  @ApiOperation({ summary: 'Get a user by ID' })
+  @ApiOperation({ summary: 'Get a guru by ID' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({
     status: 200,
-    description: 'Successfully retrieved the user.',
+    description: 'Successfully retrieved the guru.',
     type: BaseResponse,
   })
   @ApiResponse({
     status: 404,
-    description: 'User not found.',
+    description: 'Guru not found.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -119,12 +119,12 @@ export class UserController {
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Put(':id')
-  @ApiOperation({ summary: 'Update a user by ID' })
+  @ApiOperation({ summary: 'Update a guru by ID' })
   @ApiParam({ name: 'id', type: String })
   @ApiBody({ type: UpdateDtoUser })
   @ApiResponse({
     status: 200,
-    description: 'The user has been successfully updated.',
+    description: 'The guru has been successfully updated.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -134,7 +134,7 @@ export class UserController {
   })
   @ApiResponse({
     status: 404,
-    description: 'User not found.',
+    description: 'Guru not found.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -153,16 +153,16 @@ export class UserController {
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete a user by ID' })
+  @ApiOperation({ summary: 'Delete a guru by ID' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({
     status: 200,
-    description: 'The user has been successfully deleted.',
+    description: 'The guru has been successfully deleted.',
     type: BaseResponse,
   })
   @ApiResponse({
     status: 404,
-    description: 'User not found.',
+    description: 'Guru not found.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -171,7 +171,7 @@ export class UserController {
     type: BaseResponse,
   })
   @Permission('DELETE')
-  async softDelete(
+  async delete(
     @Param('id') id: string,
     @Req() req: Request,
   ): Promise<BaseResponse<User>> {
@@ -188,7 +188,7 @@ export class UserController {
           const uniqueSuffix =
             Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);
-          const filename = `user-photo-${uniqueSuffix}${ext}`;
+          const filename = `guru-photo-${uniqueSuffix}${ext}`;
           callback(null, filename);
         },
       }),
@@ -203,11 +203,11 @@ export class UserController {
       },
     }),
   )
-  @ApiOperation({ summary: 'Upload user profile photo' })
-  @ApiParam({ name: 'id', type: String, description: 'User ID' })
+  @ApiOperation({ summary: 'Upload guru profile photo' })
+  @ApiParam({ name: 'id', type: String, description: 'Guru ID' })
   @ApiResponse({
     status: 200,
-    description: 'Profile photo uploaded successfully.',
+    description: 'Guru profile photo uploaded successfully.',
     type: BaseResponse,
   })
   @ApiResponse({
@@ -217,7 +217,7 @@ export class UserController {
   })
   @ApiResponse({
     status: 404,
-    description: 'User not found.',
+    description: 'Guru not found.',
     type: BaseResponse,
   })
   @ApiResponse({
